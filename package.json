@@ -1,0 +1,21 @@
+{
+  "name": "Expand",
+  "version": "1.0.0",
+  "description": "Expand - plugin to shrink and expand a div",
+  "dependencies": {},
+  "devDependencies": {
+    "jshint": "^2.9.1",
+    "mocha": "^2.4.5",
+    "uglify-js": "^2.6.2"
+  },
+  "scripts": {
+    "info": "echo 'Expand - plugin to shrink and expand a div'",
+    "lint": "echo 'linting' && jshint assets/main.js",
+    "test": "echo 'testing' && mocha test/",
+    "minify:js": "echo 'minify:js' && uglifyjs assets/main.js -o dist/expand.min.js",
+    "pretest": "npm run lint -s",
+    "posttest": "npm run minify:js"
+  },
+  "author": "Hayden Wagner",
+  "license": "ISC"
+}
