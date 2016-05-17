@@ -2,13 +2,58 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script src='expand.min.js'></script>
+
+        <title>SMS Expand Test</title>
+
+        <link type="text/css" rel="stylesheet" href="expand.css"/>
     </head>
 
     <body>
-        <p>Hello world! This is HTML5 Boilerplate.</p>
+        <h2>Test for the expand interaction</h2>
+
+        <div id="exp1">
+          <h3>Test Heading 1</h3>
+
+          <p>The School of Media Sciences focuses on educating for the transition of print to digital publishing. Past experience with Adobe DPS has helped our students and alumni gain expertise in how to communicate when publications shift from print to digital devices. In the summer of 2015, two students were given the opportunity to work with the prerelease of Adobe Publishing Solution to solve the challenge of a constant push of new content that we see in app devices today.</p>
+
+          <p>With the help of two staff advisors and an Adobe DPS sponsor, the students were asked to create an app for the School of Media Sciences that included interactivity, highlights the skills that our students acquire, and showcase the new possibilities in digital publishing. This project and its result is a great example of programming and design coming together, a combination of the aesthetic and technical design skills or students learn in the classroom.</p>
+
+          <p>Through this partnership with School of Media Sciences and Adobe, this app will become a primary recruitment and educational tool for the school - enticing prospective applicants, current students and alumni to consider app communication as a form of publishing.</p>
+        </div>
+
+        <div id="exp2">
+          <h3>Test Heading 2</h3>
+
+          <p>The School of Media Sciences focuses on educating for the transition of print to digital publishing. Past experience with Adobe DPS has helped our students and alumni gain expertise in how to communicate when publications shift from print to digital devices. In the summer of 2015, two students were given the opportunity to work with the prerelease of Adobe Publishing Solution to solve the challenge of a constant push of new content that we see in app devices today.</p>
+
+          <p>With the help of two staff advisors and an Adobe DPS sponsor, the students were asked to create an app for the School of Media Sciences that included interactivity, highlights the skills that our students acquire, and showcase the new possibilities in digital publishing. This project and its result is a great example of programming and design coming together, a combination of the aesthetic and technical design skills or students learn in the classroom.</p>
+
+          <p>Through this partnership with School of Media Sciences and Adobe, this app will become a primary recruitment and educational tool for the school - enticing prospective applicants, current students and alumni to consider app communication as a form of publishing.</p>
+        </div>
+
+        <div id="exp3">
+          <h3>Test Heading 3</h3>
+
+          <p>The School of Media Sciences focuses on educating for the transition of print to digital publishing. Past experience with Adobe DPS has helped our students and alumni gain expertise in how to communicate when publications shift from print to digital devices. In the summer of 2015, two students were given the opportunity to work with the prerelease of Adobe Publishing Solution to solve the challenge of a constant push of new content that we see in app devices today.</p>
+
+          <p>With the help of two staff advisors and an Adobe DPS sponsor, the students were asked to create an app for the School of Media Sciences that included interactivity, highlights the skills that our students acquire, and showcase the new possibilities in digital publishing. This project and its result is a great example of programming and design coming together, a combination of the aesthetic and technical design skills or students learn in the classroom.</p>
+
+          <p>Through this partnership with School of Media Sciences and Adobe, this app will become a primary recruitment and educational tool for the school - enticing prospective applicants, current students and alumni to consider app communication as a form of publishing.</p>
+        </div>
+
+
     </body>
+    <script src='main.js'></script>
+    <script>
+      var expandArray = ['exp1','exp2','exp3'];
+      makeExpand(expandArray);
+
+      function makeExpand(array){
+        for(var i = 0; i<array.length; i++){
+          var testExpand = Object.create( Expand );
+          testExpand.setUp(array[i], {fade:true});
+        }
+      }
+    </script>
 </html>

@@ -1,47 +1,6 @@
-'use strict';
+//old see more code
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-// (function(){
-//   "use strict";
-
-//   class
-
-//   //try es6 class and use babel npm to convert
-
-// })();
-
-var Expand = function () {
-  function Expand(divId, optionsObj) {
-    _classCallCheck(this, Expand);
-
-    options = options || {};
-    options.height = options.hasOwnProperty('height') ? options.height : 300;
-    options.fade = options.hasOwnProperty('fade') ? options.fade : false;
-
-    this.div = this.setDiv(divId);
-    this.height = options.height;
-  }
-
-  _createClass(Expand, [{
-    key: 'setDiv',
-    value: function setDiv(id) {
-      try {
-        document.getElementById(id);
-      } catch (err) {
-        throw "Cannot find div with id: " + id;
-      }
-      return document.getElementById(id);
-    }
-  }]);
-
-  return Expand;
-}();
-
-var testExpand = new Expand("expand-div-1");
-console.log(testExpand);
 
 /*
 

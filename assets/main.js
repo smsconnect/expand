@@ -1,39 +1,136 @@
-// (function(){
-//   "use strict";
+/*jslint browser:true */
 
-//   class
+//(function(){
+ // 'use strict';
 
-//   //try es6 class and use babel npm to convert
+  // class Expand {
+  //   constructor(divId, options) {
+  //     options = options || {};
+  //     options.height = options.hasOwnProperty('height') ? options.height : 300;
+  //     options.fade = options.hasOwnProperty('fade') ? options.fade : false;
 
-// })();
+  //     this.div = this.setDiv(divId);
+  //     this.height = options.height;
+  //   }
 
-class Expand {
-  constructor(divId, optionsObj) {
-    options = options || {};
-    options.height = options.hasOwnProperty('height') ? options.height : 300;
-    options.fade = options.hasOwnProperty('fade') ? options.fade : false;
+  //   setDiv(id) {
+  //     try {
+  //       document.getElementById(id);
+  //     } catch (err) {
+  //       throw "Cannot find div with that id";
+  //     }
 
-    this.div = this.setDiv(divId);
-    this.height = options.height;
-  }
+  //     console.log(id);
+  //     console.dir(document.getElementById(id));
+  //     return document.getElementById(id);
+  //   }
+  // }
 
-  setDiv(id) {
-    try {
-      document.getElementById(id);
-    } catch (err) {
-      throw "Cannot find div with id: " + id;
+  // const testExpand = new Expand("expand");
+  // console.dir(testExpand);
+
+
+  var Expand = {
+    expanded:false,
+
+    setUp:function(id, options){
+      this.resolveOptions(options);
+
+      this.containerDiv = this.setContainerDiv(id);
+      this.button = this.makeButton();
+      if(this.fade){
+        this.fade = this.makeFade();
+      }
+    },
+
+    resolveOptions:function(options){
+      options = options || {};
+
+      this.contractedHeight = options.hasOwnProperty('height') ? options.height : 300;
+      this.fade = options.hasOwnProperty('fade') ? options.fade : false;
+    },
+
+    setContainerDiv:function(id){
+      var containerDiv;
+
+      try {
+        containerDiv = document.getElementById(id);
+      } catch (err) {
+        throw "Cannot find div with that id";
+      }
+
+      containerDiv.className = 'interaction_expand-holder';
+      //this.expandedHeight = containerDiv.scrollHeight;
+      containerDiv.style.height = this.contractedHeight + 'px';
+
+      return containerDiv;
+    },
+
+    makeButton:function(){
+      var button = document.createElement('div');
+      var buttonText = document.createElement('p');
+      var objectThisHolder = this;
+
+      button.className = 'interaction_button';
+
+      buttonText.innerHTML = '+ Read&nbsp;More';
+      button.appendChild(buttonText);
+
+      this.containerDiv.parentNode.insertBefore(button, this.containerDiv.nextSibling);
+
+      button.addEventListener('click', function(){
+        objectThisHolder.checkExpandState();
+      });
+
+      this.buttonText = buttonText;
+      return button;
+    },
+
+    makeFade:function(){
+      var fade = document.createElement('div');
+      fade.className = 'interaction_bottom-shadow';
+
+      this.containerDiv.appendChild(fade);
+
+      return fade;
+    },
+
+    checkExpandState: function(){
+      if(this.expanded){
+        this.contract();
+      }
+      else{
+        this.expand();
+      }
+    },
+
+    expand: function(){
+      console.log('now we grow');
+      this.containerDiv.style.height = this.containerDiv.scrollHeight + 'px';
+      this.buttonText.innerHTML = '- Read&nbsp;Less';
+      if(this.fade){
+        this.fade.style.opacity = 0;
+      }
+      this.expanded = true;
+      console.log(this.containerDiv.scrollHeight);
+    },
+
+    contract: function(){
+      console.log('now we shrink');
+      this.containerDiv.style.height = this.contractedHeight + 'px';
+      this.buttonText.innerHTML = '+ Read&nbsp;More';
+      if(this.fade){
+        this.fade.style.opacity = 1;
+      }
+      this.expanded = false;
     }
-    return document.getElementById(id);
-  }
-}
+  };
 
-const testExpand = new Expand("expand-div-1");
-console.log(testExpand);
+//})();
 
 
 
 /*
-
 seeMore: {
 
     //expanded: [],
