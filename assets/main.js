@@ -1,437 +1,186 @@
-/*jslint browser:true */
+//object that will contract to limit size of div and then offer user button to expand
+//to full size
+var Expand = {
 
-//(function(){
- // 'use strict';
+	//property to keep track of expanded/contracted status
+	expanded:false,
 
-  // class Expand {
-  //   constructor(divId, options) {
-  //     options = options || {};
-  //     options.height = options.hasOwnProperty('height') ? options.height : 300;
-  //     options.fade = options.hasOwnProperty('fade') ? options.fade : false;
-
-  //     this.div = this.setDiv(divId);
-  //     this.height = options.height;
-  //   }
-
-  //   setDiv(id) {
-  //     try {
-  //       document.getElementById(id);
-  //     } catch (err) {
-  //       throw "Cannot find div with that id";
-  //     }
-
-  //     console.log(id);
-  //     console.dir(document.getElementById(id));
-  //     return document.getElementById(id);
-  //   }
-  // }
-
-  // const testExpand = new Expand("expand");
-  // console.dir(testExpand);
-
-
-  var Expand = {
-    expanded:false,
-
-    setUp:function(id, options){
-      this.resolveOptions(options);
-
-      this.containerDiv = this.setContainerDiv(id);
-      this.button = this.makeButton();
-      if(this.fade){
-        this.fade = this.makeFade();
-      }
-    },
-
-    resolveOptions:function(options){
-      options = options || {};
-
-      this.contractedHeight = options.hasOwnProperty('height') ? options.height : 300;
-      this.fade = options.hasOwnProperty('fade') ? options.fade : false;
-    },
-
-    setContainerDiv:function(id){
-      var containerDiv;
-
-      try {
-        containerDiv = document.getElementById(id);
-      } catch (err) {
-        throw "Cannot find div with that id";
-      }
-
-      containerDiv.className = 'interaction_expand-holder';
-      //this.expandedHeight = containerDiv.scrollHeight;
-      containerDiv.style.height = this.contractedHeight + 'px';
-
-      return containerDiv;
-    },
-
-    makeButton:function(){
-      var button = document.createElement('div');
-      var buttonText = document.createElement('p');
-      var objectThisHolder = this;
-
-      button.className = 'interaction_button';
-
-      buttonText.innerHTML = '+ Read&nbsp;More';
-      button.appendChild(buttonText);
-
-      this.containerDiv.parentNode.insertBefore(button, this.containerDiv.nextSibling);
-
-      button.addEventListener('click', function(){
-        objectThisHolder.checkExpandState();
-      });
-
-      this.buttonText = buttonText;
-      return button;
-    },
-
-    makeFade:function(){
-      var fade = document.createElement('div');
-      fade.className = 'interaction_bottom-shadow';
-
-      this.containerDiv.appendChild(fade);
-
-      return fade;
-    },
-
-    checkExpandState: function(){
-      if(this.expanded){
-        this.contract();
-      }
-      else{
-        this.expand();
-      }
-    },
-
-    expand: function(){
-      console.log('now we grow');
-      this.containerDiv.style.height = this.containerDiv.scrollHeight + 'px';
-      this.buttonText.innerHTML = '- Read&nbsp;Less';
-      if(this.fade){
-        this.fade.style.opacity = 0;
-      }
-      this.expanded = true;
-      console.log(this.containerDiv.scrollHeight);
-    },
-
-    contract: function(){
-      console.log('now we shrink');
-      this.containerDiv.style.height = this.contractedHeight + 'px';
-      this.buttonText.innerHTML = '+ Read&nbsp;More';
-      if(this.fade){
-        this.fade.style.opacity = 1;
-      }
-      this.expanded = false;
-    }
-  };
-
-//})();
-
-
-
-/*
-seeMore: {
-
-    //expanded: [],
-    //buttonsVisible: [],
-    //buttonParents: [],
-    //
-    buttonDetails: {},
-
-    setUp: function () {
-      buttonArr = $( '.interaction--see-more--button' ).toArray();
-      holderArr = $( '.interaction--see-more--holder').toArray();
-      bottomShadowArr = $( '.interaction_bottom-shadow').toArray();
-
-      this.buttonArray = buttonArr;
-      this.holderArray = holderArr;
-      this.bottomShadowArray = bottomShadowArr;
-
-      for ( var a = 0; a < buttonArr.length; a++ ){
-        var idString = buttonArr[a].id.toString();
-
-        if ( typeof window.addEventListener === 'function' ){
-          (function (_a) {
-              _a.addEventListener('click', function(){
-                  //console.log(_a);
-                  dpsInteractions.seeMore.touchSeeMoreExpand( _a );
-              });
-          })(buttonArr[a]);
-        }
-
-        this.buttonDetails[ idString ] = {
-          button: buttonArr[a],
-        }
-
-        if ( $( buttonArr[a] ).hasClass( "interaction--see-more--button--default-hidden" ) ) {
-          this.buttonDetails[ idString ].visible = false;
-        } else {
-          this.buttonDetails[ idString ].visible = true;
-        }
-
-        this.buttonDetails[ idString ].expanded = false;
-
-        for ( var i = 0; i < holderArr.length; i++ ) {
-          var holderIdString = holderArr[i].id.toString();
-          if ( this.buttonDetails.hasOwnProperty( holderIdString ) ) {
-            this.buttonDetails[ holderIdString ].holder = holderArr[i];
-            this.buttonDetails[ holderIdString ].holderHeight = $( holderArr[i] ).height();
-          }
-        }
-
-        //this.buttons[ buttonArr[a].id ] = buttonArr[a];
-        //this.buttonParents[ buttonArray[a].id ] = array[a].parentNode;
-      }
-
-      //console.log(this.buttonArray);
-      //console.log(this.buttonDetails);
-
-    },
-
-    showOrHideSeeMoreButton: function( element, action ) {
-      //console.log(element);
-      //console.log(action)
-
-      var seeMore = this
-        , arr = seeMore.buttonArray;
-
-      for ( i = 0; i < arr.length; i++ ) {
-        if ( arr[i].id == element ) {
-          if ( action == "in" ) {
-
-            if( dpsInteractions.blink.hasBlink( arr[i] ) ) {
-              dpsInteractions.blink.turnBlinkOn( arr[i] );
-            }
-
-            $( arr[i] ).stop().fadeTo( 100, 1 );
-          } else if ( action == "out" ) {
-
-            if( dpsInteractions.blink.hasBlink( arr[i] ) ) {
-              dpsInteractions.blink.turnBlinkOff( arr[i] );
-            }
-
-
-            //$( arr[i] ).css( "opacity", 0 );
-            $( arr[i] ).stop().fadeTo( 100, 0 );
-            //console.log( "jamalangadingdong");
-            //console.log( arr[i] );
-          }
-        }
-      }
-    },
-
-    touchSeeMoreExpand: function( button, scroll ) {
-      var seeMore = this
-        , buttonId = button.id
-        , buttonIdString = buttonId.toString()
-        , detailsObject
-        , selectedHolder
-        , buttonArrPos
-        , buttonClone;
-
-      if ( !scroll && $(button).hasClass("interaction_accordion") ) {
-        scroll = true;
-      } else {
-        scroll = false;
-      }
-
-      detailsObject = seeMore.buttonDetails[ buttonIdString ];
-      selectedHolder = detailsObject.holder;
-
-      if ( scroll ) {
-        $( selectedHolder ).animate({
-          height: $( selectedHolder ).get(0).scrollHeight
-        }, 0, function(){
-          var scrollTopTotal = document.body.clientHeight - dpsInteractions.deviceHeight;
-          $( window ).scrollTo( scrollTopTotal, 500);
-        });
-      } else {
-        $( selectedHolder ).animate({
-          height: $( selectedHolder ).get(0).scrollHeight
-        }, 500);
-      }
-
-
-
-
-      buttonArrPos = seeMore.buttonArray.indexOf(button);
-      buttonClone = button.cloneNode(true);
-
-      button.parentNode.replaceChild(buttonClone, button);
-
-      //call to Adobe HTML Gesture API to disable touch on cloned button
-      api.disableNavDropdown(buttonClone);
-
-      seeMore.buttonArray[buttonArrPos] = buttonClone;
-
-      if( /Read/.test(buttonClone.innerHTML) ) {
-        //console.log(buttonClone.innerHTML);
-        buttonClone.innerHTML = "<p>- Read Less</p>";
-      }
-
-
-      if ( $ ( buttonClone ).find( "span" ).length > 0) {
-        var theSpan = $ ( buttonClone ).find( "span" )[0];
-        theSpan.innerHTML = "&ndash;";
-      }
-
-
-      buttonClone.addEventListener('click', function() {
-        (function (_b) {
-          seeMore.touchSeeMoreContract( _b, true );
-        })(buttonClone);
-      });
-
-      dpsInteractions.blink.replaceBlinkReference( button, buttonClone );
-
-      for ( var i = 0; i < seeMore.bottomShadowArray.length; i++ ) {
-        var bottomShadow = seeMore.bottomShadowArray;
-        if ( bottomShadow[i].id === buttonId ) {
-          $( bottomShadow[i] ).fadeOut();
-          break;
-        }
-      }
-
-      seeMore.buttonDetails[buttonIdString].expanded = true;
-    },
-
-    findButton: function( touchedId ) {
-      var seeMore = this
-        , arr = seeMore.buttonArray
-        , button;
-
-      for ( i = 0; i < arr.length; i++ ) {
-        if ( arr[i].id == touchedId ) {
-            button = arr[i];
-            //console.log(button);
-        }
-      }
-      return button;
-    },
-
-    touchSeeMoreContract: function( button, scroll ) {
-      var seeMore = this
-        , buttonId = button.id
-        , buttonIdString = buttonId.toString()
-        , detailsObject
-        , selectedHolder
-        , height
-        , buttonArrPos
-        , buttonClone;
-
-      if ( !scroll || $(button).hasClass("interaction_accordion") ) {
-        scroll = false;
-      }
-
-      detailsObject = seeMore.buttonDetails[ buttonIdString ];
-      selectedHolder = detailsObject.holder;
-      height = detailsObject.holderHeight;
-
-      //$( selectedHolder ).animate({
-      //  height: height
-      //}, 500, //function() {
-        console.log("holder is finished animating");
-        if ( scroll ) {
-          var offsetHeight = 200;
-          $( window ).scrollTo( $( selectedHolder).offset().top - offsetHeight, 350, function() {
-            $( selectedHolder ).animate({
-              height: height
-            }, 200);
-          });
-        } else {
-          $( selectedHolder ).animate({
-            height: height
-          }, 500);
-        }
-      //});
-
-      buttonArrPos = seeMore.buttonArray.indexOf(button);
-      buttonClone = button.cloneNode(true);
-
-      button.parentNode.replaceChild(buttonClone, button);
-
-      //call to Adobe HTML Gesture API to disable touch on cloned button
-      api.disableNavDropdown(buttonClone);
-
-      seeMore.buttonArray[buttonArrPos] = buttonClone;
-
-      if ( /Read/.test(buttonClone.innerHTML) ) {
-        //console.log(buttonClone.innerHTML);
-        buttonClone.innerHTML = "<p>+ Read More</p>";
-      }
-
-
-      if ( $ ( buttonClone ).find( "span" ).length > 0 ) {
-        var theSpan = $ ( buttonClone ).find( "span" )[0];
-        theSpan.innerHTML = "+";
-      }
-
-
-      buttonClone.addEventListener('click', function() {
-        (function (_b) {
-          seeMore.touchSeeMoreExpand( _b );
-        })(buttonClone);
-      });
-
-      dpsInteractions.blink.replaceBlinkReference( button, buttonClone );
-
-
-      for ( var i = 0; i < seeMore.bottomShadowArray.length; i++ ) {
-        var bottomShadow = seeMore.bottomShadowArray;
-        if ( bottomShadow[i].id === buttonId ) {
-          $( bottomShadow[i] ).fadeIn();
-          break;
-        }
-      }
-
-      seeMore.buttonDetails[buttonIdString].expanded = false;
-    },
-
-    hasSeeMoreButton: function( touchedId ) {
-      var seeMore = this
-        , arrContainsId = false;
-
-      for ( var i = 0; i < seeMore.buttonArray.length; i++ ) {
-        if ( seeMore.buttonArray[i].id == touchedId ) {
-          arrContainsId = true;
-          break;
-        }
-      }
-
-      if ( arrContainsId === true ) {
-        //console.log( "that button is here" );
-        return true;
-      } else {
-        return false;
-      }
-    },
-
-    resizeSeeMoreHolder: function( button, buttonIdString ) {
-
-      var seeMore = this
-        , detailsObject = seeMore.buttonDetails[ buttonIdString ];
-
-
-      if ( detailsObject.expanded === true ) {
-        var selectedHolder = detailsObject.holder;
-
-        console.log(selectedHolder.childNodes);
-
-        var ec = dpsInteractions.tap.tapDetails.show[buttonIdString];
-        console.log(ec);
-        for( var i = 0; i < ec.elementsActive.length; i++) {
-          if ( ec.elementsActive[ i ] == true ) {
-            var actualHeight = ec.options[ i ].scrollHeight;
-          }
-        }
-        console.log(dpsInteractions.tap.tapDetails.show[ buttonIdString ])
-
-        $( selectedHolder ).animate({height: actualHeight + "px"}, 250 );
-      }
-    }
-
-  },
-}
-
-*/
+
+
+	/**
+	 * Creates DOM structure and attaches listener to Expand object
+	 *
+	 * @param {object} id      ID of div that will be expanding
+	 * @param {object} options Options object
+	 */
+	setUp:function(id, options){
+		//resolve any options passed in
+		this.resolveOptions(options);
+
+		//set the main container div
+		this.containerDiv = this.setContainerDiv(id);
+
+		//create and set the button that will expand div
+		this.button = this.makeButton();
+
+		//check if we want div to fade and set it up if so
+		if(this.fade){
+			this.fade = this.makeFade();
+		}
+	},
+
+
+
+	/**
+	 * Checks for a passed in options object and assigns properties or sets defaults
+	 *
+	 * @param {object} options Options object
+	 */
+	resolveOptions:function(options){
+		//if the user passed an options object we use it, or make a new empty object
+		options = options || {};
+
+		//check if user passed a height value or set default to 300
+		this.contractedHeight = options.hasOwnProperty('height') ? options.height : 300;
+
+		//check if user passed a fade value or set default to false
+		this.fade = options.hasOwnProperty('fade') ? options.fade : false;
+	},
+
+
+
+	/**
+	 * Checks for the container div on the DOM, sets its classname and height
+	 *
+	 * @param {string} id ID for HTML element
+	 */
+	setContainerDiv:function(id){
+		var containerDiv;
+
+		//see if an element with that id exists
+		try {
+			containerDiv = document.getElementById(id);
+		} catch (err) {
+			throw "Cannot find div with that id";
+		}
+
+		//set classname for styling
+		containerDiv.className = 'interaction_expand-holder';
+
+		//set contrated height of div
+		containerDiv.style.height = this.contractedHeight + 'px';
+
+		return containerDiv;
+	},
+
+
+
+	/**
+	 * Creates a div and paragraph element for the button that will expand and contract the div
+	 *
+	 * @return {object} Created button div element
+	 */
+	makeButton:function(){
+		//create div and p elements for button
+		var button = document.createElement('div');
+		var buttonText = document.createElement('p');
+
+		//var to hold Expand object 'this' for use in event callback function on button
+		var objectThisHolder = this;
+
+		//give button classname for styling
+		button.className = 'interaction_button';
+
+		//make p tag text content and append to button element
+		buttonText.innerHTML = '+ Read&nbsp;More';
+		button.appendChild(buttonText);
+
+		//append to DOM RIGHT AFTER container div...not inside the container div
+		this.containerDiv.parentNode.insertBefore(button, this.containerDiv.nextSibling);
+
+		//listener for when user interacts with button
+		button.addEventListener('click', function(){
+			objectThisHolder.checkExpandState();
+		});
+
+		//store reference to text in button becuase it will be changed when user interacts with button
+		this.buttonText = buttonText;
+
+		return button;
+	},
+
+
+
+	/**
+	 * Creates a div that will be the fade at the bottom of the main div when contracted
+	 * @return {object} Created fade div element
+	 */
+	makeFade:function(){
+		var fade = document.createElement('div');
+
+		//css does most of the work here...sets size and 'png' background for fade effect
+		fade.className = 'interaction_bottom-shadow';
+
+		this.containerDiv.appendChild(fade);
+
+		return fade;
+	},
+
+
+
+	/**
+	 * Checks the current state of div and calls appropriate function
+	 */
+	checkExpandState: function(){
+		if(this.expanded){
+			this.contract();
+		}
+		else{
+			this.expand();
+		}
+	},
+
+
+
+	/**
+	 * Behavior when user clicks the button to expand the div
+	 */
+	expand: function(){
+		//set main container div to default larger height
+		this.containerDiv.style.height = this.containerDiv.scrollHeight + 'px';
+
+		//change button text to reflect expanded state
+		this.buttonText.innerHTML = '- Read&nbsp;Less';
+
+		//turn off fad
+		if(this.fade){
+			this.fade.style.opacity = 0;
+		}
+
+		//record the new expanded state
+		this.expanded = true;
+	},
+
+
+
+	/**
+	 * Behavior when user clicks the button to contract the div
+	 */
+	contract: function(){
+		//set main container div to contracted height
+		this.containerDiv.style.height = this.contractedHeight + 'px';
+
+		//change button text to reflect contracted state
+		this.buttonText.innerHTML = '+ Read&nbsp;More';
+
+		//turn on fade
+		if(this.fade){
+			this.fade.style.opacity = 1;
+		}
+
+		//record the new contracted state
+		this.expanded = false;
+	}
+};
+
+
